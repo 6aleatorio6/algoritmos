@@ -40,11 +40,24 @@ void INCREASE(Fila *fila, int inc)
         return;
     }
 
-    for (int i = 0; i < fila->t; i++)
+    if (fila->N - fila->s > fila->t)
     {
-        fila->data[(fila->N + i - inc) % fila->N] = fila->data[i];
+        // esquerda
+        for (int i = 0; i < fila->t; i++)
+        {
+            fila->data[(fila->N + i - inc) % fila->N] = fila->data[i];
+        }
+        fila->t = (fila->t - inc + fila->N) % fila->N;
     }
-    fila->t -= inc;
+    else
+    {
+        // direita
+        for (int i = (fila->N - inc) - 1; i >= fila->s; i--)
+        {
+            fila->data[i + inc] = fila->data[i];
+        }
+        fila->s += inc;
+    }
 }
 
 int REMOVE(Fila *fila)
@@ -58,6 +71,7 @@ int REMOVE(Fila *fila)
     }
 
     printf("%d", fila->data[fila->s]);
+
     printf("\n");
 
     if (++fila->s == fila->N)
@@ -117,15 +131,15 @@ void LIST(Fila *fila)
 
     for (int i = fila->s; !isEnd(fila, i); i++)
     {
+
         printf("%d", fila->data[i % fila->N]);
 
-        if (!isEnd(fila, i - 1))
+        if (!isEnd(fila, i))
         {
             printf(" ");
         };
-
-        printf("\n");
     }
+    printf("\n");
 }
 
 int main()
