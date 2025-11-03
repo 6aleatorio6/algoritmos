@@ -18,7 +18,7 @@ void init(Fila *fila, int tam)
     fila->data = malloc(sizeof(int) * tam);
 };
 
-int isEnd(Fila *fila, int t)
+int isFull(Fila *fila, int t)
 {
     return (t + 1) % fila->N == fila->s;
 }
@@ -27,10 +27,6 @@ int isEnd(Fila *fila, int t)
 
 void INCREASE(Fila *fila, int inc)
 {
-    // verificar qual estrategia usar
-    // int posititoin = (fila->t + 1) % fila->N;
-
-    // posititoin = posititoin < fila->s;
 
     fila->N += inc;
     fila->data = realloc(fila->data, sizeof(int) * fila->N);
@@ -60,19 +56,16 @@ void INCREASE(Fila *fila, int inc)
     }
 }
 
-int REMOVE(Fila *fila)
+void REMOVE(Fila *fila)
 {
     if (fila->t == fila->s)
     {
-        printf("CLEAR");
-        printf("\n");
+        printf("CLEAR\n");
 
-        return -1;
+        return;
     }
 
-    printf("%d", fila->data[fila->s]);
-
-    printf("\n");
+    printf("%d\n", fila->data[fila->s]);
 
     if (++fila->s == fila->N)
     {
@@ -82,7 +75,7 @@ int REMOVE(Fila *fila)
 
 void ADD(Fila *fila, int newValue)
 {
-    if (isEnd(fila, fila->t))
+    if (isFull(fila, fila->t))
     {
         if (++fila->s == fila->N)
         {
@@ -110,7 +103,7 @@ void PRINT(Fila *fila)
             printf("-");
         }
 
-        if (i - 1 < fila->N)
+        if (i != fila->N - 1)
         {
             printf(" ");
         };
@@ -123,18 +116,17 @@ void LIST(Fila *fila)
 {
     if (fila->t == fila->s)
     {
-        printf("EMPTY");
-        printf("\n");
+        printf("EMPTY\n");
 
         return;
     }
 
-    for (int i = fila->s; !isEnd(fila, i); i++)
+    for (int i = fila->s; i != fila->t; i = (i + 1) % fila->N)
     {
 
         printf("%d", fila->data[i % fila->N]);
 
-        if (!isEnd(fila, i))
+        if ((i + 1) % fila->N != fila->t)
         {
             printf(" ");
         };
