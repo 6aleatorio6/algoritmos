@@ -28,6 +28,7 @@ int isFull(Fila *fila, int t)
 void INCREASE(Fila *fila, int inc)
 {
 
+    int oldN = fila->N;
     fila->N += inc;
     fila->data = realloc(fila->data, sizeof(int) * fila->N);
 
@@ -36,19 +37,19 @@ void INCREASE(Fila *fila, int inc)
         return;
     }
 
-    if (fila->N - fila->s > fila->t)
+    if (oldN - fila->s >= fila->t)
     {
         // esquerda
         for (int i = 0; i < fila->t; i++)
         {
-            fila->data[(fila->N + i - inc) % fila->N] = fila->data[i];
+            fila->data[(oldN + i) % fila->N] = fila->data[i];
         }
-        fila->t = (fila->t - inc + fila->N) % fila->N;
+        fila->t = (fila->t + oldN) % fila->N;
     }
     else
     {
         // direita
-        for (int i = (fila->N - inc) - 1; i >= fila->s; i--)
+        for (int i = oldN - 1; i >= fila->s; i--)
         {
             fila->data[i + inc] = fila->data[i];
         }
@@ -180,29 +181,4 @@ int main()
             INCREASE(&fila, value);
         };
     };
-
-    // init(&fila, 10);
-
-    // teste init ---
-    // printf("s: %d, t: %d, N: %d\n", fila.s, fila.t, fila.N);
-
-    // teste insert ---
-    // insert(&fila, 2);
-    // insert(&fila, 6);
-    // printf("s: %d, t: %d, N: %d | elem1: %d elem2: %d  |\n", fila.s, fila.t, fila.N, fila.data[fila.t - 2], fila.data[fila.t - 1]);
-
-    // printf("s: %d, t: %d, N: %d\n", fila.s, fila.t, fila.N);
-
-    // insert(&fila, 2);
-    // insert(&fila, 6);
-    // insert(&fila, 2);
-    // insert(&fila, 6);
-
-    // ADD(&fila, 10);
-    // ADD(&fila, 15);
-    // ADD(&fila, 14);
-    // //
-    // PRINT(&fila);
-    // printf("\n");
-    // LIST(&fila);
 }
