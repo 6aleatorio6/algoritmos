@@ -57,7 +57,7 @@ Node *removeNode(Node *node, int jump)
     return prev;
 }
 
-void main()
+int main()
 {
     int caseLength = 0;
     scanf("%d", &caseLength);
@@ -87,4 +87,6 @@ void main()
 
         printf("Case %d: %d\n", caseI, queue->head->next->position);
     }
+
+    return 0;
 }
