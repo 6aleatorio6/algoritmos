@@ -5,7 +5,7 @@ SRC="$1"
 OUT="/tmp/programaPaia.o"
 
 rm -f "$OUT" > /dev/null 2>&1
-gcc "${SRC}/code.c" -o "$OUT"
+clang -std=c99 -O2 -lm "${SRC}/code.c" -o  "$OUT"
 
 set +e
  "$OUT" < "${SRC}/input.txt"
