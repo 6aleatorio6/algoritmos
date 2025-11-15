@@ -7,47 +7,83 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-typedef int Callback(Node *head);
+// typedef int Callback(Node *head);
 
-void forEach(Node *head, Callback cb)
+// void forEach(Node *head, Callback cb)
+// {
+
+//     Node *tmp = head;
+//     while (tmp != NULL)
+//     {
+//         if (cb(tmp))
+//         {
+//             break;
+//         }
+
+//         tmp = head->next;
+//     }
+// }
+
+void startInsert(Node *head, int newPosition)
 {
+    Node *newNode = malloc(sizeof(Node));
+    newNode->position = newPosition;
+    newNode->next = head->next;
 
+    head->next = newNode;
+}
+
+void removeNode(Node *head, int position)
+{
     Node *tmp = head;
-    while (tmp != NULL)
+    while (tmp->next->position != -1)
     {
-        if (cb(tmp))
+        Node *prev = tmp;
+        Node *target = tmp->next;
+        Node *next = tmp->next->next;
+
+        if (position == target->position)
         {
-            break;
+            prev->next = next;
+
+            free(target);
+            return;
         }
 
-        tmp = head->next;
+        tmp = target;
     }
-}
-
-int printNode(Node *node)
-{
-    printf("position: %d\n", node->position);
-
-    return 0;
-}
-
-Callback remove(Node *node, int position)
-{
-
-    int removeCb(Node * nodeCb)
-    {
-        return nodeCb->position
-    }
-
-    return removeCb
 }
 
 void main()
 {
-    Node initialNode = {
-        1, NULL};
+    int caseLength = 0;
+    scanf("%d", &caseLength);
 
-    Node *queueHead = &initialNode;
+    for (size_t i = 0; i < caseLength; i++)
+    {
+        Node headNode = {
+            -1, &headNode};
 
-    // forEach(queueHead, printNode);
+        Node *queueHead = &headNode;
+        int queueLenght = 0;
+
+        int size = 0;
+        int jump = 0;
+
+        scanf("%d %d", &size, &jump);
+
+        for (size_t position = 1; position <= size; position++)
+        {
+            startInsert(queueHead, position);
+            queueLenght++;
+        }
+
+        for (size_t count = 1; queueHead->next->next->position == -1; count = (count + jump) % queueLenght)
+        {
+            removeNode(queueHead, count);
+            queueLenght--;
+        }
+
+        printf("Case %d: %d\n", i + 1, queueHead->next->position);
+    }
 }
