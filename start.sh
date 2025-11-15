@@ -7,6 +7,11 @@ OUT="/tmp/programaPaia.o"
 rm -f "$OUT" > /dev/null 2>&1
 gcc "${SRC}/code.c" -o "$OUT"
 
+set +e
+ "$OUT" < "${SRC}/input.txt"
+set -e
+
+
 mapfile -t OUT_LINES < <("$OUT" < "${SRC}/input.txt")
 mapfile -t EXP_LINES < "${SRC}/result.txt"
 
