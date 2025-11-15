@@ -7,51 +7,54 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-// typedef int Callback(Node *head);
-
-// void forEach(Node *head, Callback cb)
-// {
-
-//     Node *tmp = head;
-//     while (tmp != NULL)
-//     {
-//         if (cb(tmp))
-//         {
-//             break;
-//         }
-
-//         tmp = head->next;
-//     }
-// }
-
-void startInsert(Node *head, int newPosition)
+typedef struct
 {
-    Node *newNode = malloc(sizeof(Node));
-    newNode->position = newPosition;
-    newNode->next = head->next;
+    Node *head;
+    int length;
+} Queue;
 
-    head->next = newNode;
+typedef int Callback(Node *head);
+
+void init(Queue *queue)
+{
+    queue->head = malloc(sizeof(Node));
+    queue->head->next = queue->head;
+    queue->head->position = -1;
+    queue->length = 0;
 }
 
-void removeNode(Node *head, int position)
+void startInsert(Queue *queue, int newPosition)
 {
-    Node *tmp = head;
-    while (tmp->next->position != -1)
+    Node *newNode = malloc(sizeof(Node));
+
+    newNode->position = newPosition;
+    newNode->next = queue->head->next;
+
+    queue->head->next = newNode;
+}
+
+Node *removeNode(Node *node, int jump)
+{
+    Node *prev;
+    Node *target;
+    Node *next;
+
+    Node *tmp = node;
+    for (int index = 1; index <= jump; index++)
     {
-        Node *prev = tmp;
-        Node *target = tmp->next;
-        Node *next = tmp->next->next;
+        prev = tmp;
 
-        if (position == target->position)
-        {
-            prev->next = next;
+        tmp = target = prev->next;
+        next = target->next;
 
-            free(target);
-            return;
-        }
-
-        tmp = target;
+        if (target->position == -1)
+            index--;
     }
+
+    prev->next = next;
+    free(target);
+
+    return prev;
 }
 
 void main()
@@ -59,31 +62,29 @@ void main()
     int caseLength = 0;
     scanf("%d", &caseLength);
 
-    for (size_t i = 0; i < caseLength; i++)
+    for (int caseI = 1; caseI <= caseLength; caseI++)
     {
-        Node headNode = {
-            -1, &headNode};
 
-        Node *queueHead = &headNode;
-        int queueLenght = 0;
+        Queue *queue = malloc(sizeof(Queue));
+        init(queue);
 
         int size = 0;
         int jump = 0;
-
         scanf("%d %d", &size, &jump);
 
-        for (size_t position = 1; position <= size; position++)
+        for (int position = 0; position < size; position++)
         {
-            startInsert(queueHead, position);
-            queueLenght++;
+            startInsert(queue, size - position);
+            queue->length++;
         }
 
-        for (size_t count = 1; queueHead->next->next->position == -1; count = (count + jump) % queueLenght)
+        Node *tmp = queue->head;
+        while (queue->length != 1)
         {
-            removeNode(queueHead, count);
-            queueLenght--;
+            tmp = removeNode(tmp, jump);
+            queue->length--;
         }
 
-        printf("Case %d: %d\n", i + 1, queueHead->next->position);
+        printf("Case %d: %d\n", caseI, queue->head->next->position);
     }
 }
