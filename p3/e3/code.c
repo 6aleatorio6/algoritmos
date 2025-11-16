@@ -39,11 +39,14 @@ void endInsert(Queue *queue, int newCard)
         queue->tail->next = newNode;
         queue->tail = newNode;
     }
+
+    queue->length++;
 }
 
-void removeFirstNode(Queue *queue)
+int removeFirstNode(Queue *queue)
 {
     Node *oldNode = queue->head;
+    int card = oldNode->card;
 
     if (oldNode == queue->tail)
     {
@@ -55,56 +58,42 @@ void removeFirstNode(Queue *queue)
         queue->head = oldNode->next;
 
         free(oldNode);
+        queue->length--;
     }
+
+    return card;
 }
 
 int main()
 {
-    Queue *queue = malloc(sizeof(Queue));
-    init(queue);
+    int input;
 
-    endInsert(queue, 1);
-    endInsert(queue, 1);
-    endInsert(queue, 2);
-    removeFirstNode(queue);
-    printf("%d |", queue->tail->card);
+    while (scanf("%d", &input) && input)
+    {
 
-    // int caseLength = 0;
-    // scanf("%d\n", &caseLength);
+        Queue *queue = malloc(sizeof(Queue));
+        init(queue);
 
-    // for (int caseI = 1; caseI <= caseLength; caseI++)
-    // {
-    //     Node *headNode = NULL;
-    //     int count = 0;
+        for (size_t i = 1; i <= input; i++)
+        {
+            endInsert(queue, i);
+        }
 
-    //     int result;
-    //     while ((result = searchDiamond()))
-    //     {
-    //         if (result == 1)
-    //         {
+        printf("Discarded cards:");
+        while (queue->length >= 2)
+        {
 
-    //             startInsert(&headNode, '<');
-    //             continue;
-    //         }
+            printf(" %d",
+                   removeFirstNode(queue));
 
-    //         if (result == 2 && headNode != NULL)
-    //         {
+            endInsert(queue,
+                      removeFirstNode(queue));
 
-    //             count++;
-    //             endRemove(&headNode);
-    //         }
-
-    //         if (result == 4)
-    //         {
-    //             while (headNode != NULL)
-    //             {
-    //                 endRemove(&headNode);
-    //             }
-    //         }
-    //     }
-
-    //     printf("%d\n", count);
-    // }
+            if (queue->length >= 2)
+                printf(",");
+        }
+        printf("\nRemaining card: %d\n", queue->head->card);
+    }
 
     return 0;
 }
