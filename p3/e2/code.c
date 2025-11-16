@@ -11,16 +11,9 @@ void startInsert(Node **node, char newData)
 {
     Node *newNode = malloc(sizeof(Node));
     newNode->data = newData;
-    newNode->next = NULL;
+    newNode->next = *node;
 
-    if (*node == NULL)
-    {
-        *node = newNode;
-    }
-    else
-    {
-        (*node)->next = newNode;
-    }
+    *node = newNode;
 }
 
 void endRemove(Node **node)
