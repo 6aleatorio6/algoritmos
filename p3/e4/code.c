@@ -27,7 +27,7 @@ void insert(Node **head, int num, char order)
             break;
         }
 
-        if (num > tmp->num)
+        if (order == 'a' ? num > tmp->num : num < tmp->num)
             continue;
 
         newNode->next = tmp;
@@ -65,7 +65,7 @@ int main()
         }
         else
         {
-            insert(&headNodePar, result, 's');
+            insert(&headNodePar, result, 'a');
         }
     }
 
@@ -74,10 +74,10 @@ int main()
         printf("%d\n", tmp->num);
     }
 
-    // for (Node *tmp = headNodeImpar; tmp != NULL; tmp = tmp->next)
-    // {
-    //     printf("%d\n", tmp->num);
-    // }
+    for (Node *tmp = headNodeImpar; tmp != NULL; tmp = tmp->next)
+    {
+        printf("%d\n", tmp->num);
+    }
 
     return 0;
 }
