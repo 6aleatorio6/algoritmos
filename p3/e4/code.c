@@ -19,75 +19,64 @@ void insert(Node **head, int num, char order)
         return;
     }
 
-    for (Node *tmp = *head, *headNext = NULL; 1; tmp = tmp->next)
+    for (Node *prev = NULL, *tmp = *head; 1; prev = tmp, tmp = tmp->next)
     {
-
-        if (headNext == NULL)
+        if (tmp == NULL)
         {
-
-            if (order == 'a' ? (*head)->num < num : (*head)->num > num)
-            {
-                // add na frente
-                newNode->next = tmp->next;
-                tmp->next = newNode;
-            }
-            else
-            {
-                // add atras
-                newNode->next = *head;
-                *head = newNode;
-            }
-
+            prev->next = newNode;
             break;
         }
 
-        if (order == 'a' ? tmp->next->num > num : tmp->next->num < num)
+        if (num > tmp->num)
+            continue;
+
+        newNode->next = tmp;
+
+        if (prev != NULL)
         {
-            newNode->next = tmp->next;
-            tmp->next = newNode;
-            break;
+            prev->next = newNode;
+        }
+        else
+        {
+            *head = newNode;
         }
 
-        headNext->next = tmp->next;
+        break;
     };
 }
 
 int main()
 {
-    Node *headNode = NULL;
-    insert(&headNode, 1, 'a');
-    insert(&headNode, 2, 'a');
-    insert(&headNode, 0, 'a');
 
-    printf("%d", headNode->num);
+    int caseLength = 0;
+    scanf("%d\n", &caseLength);
 
-    // int input;
+    Node *headNodeImpar = NULL;
+    Node *headNodePar = NULL;
 
-    // while (scanf("%d", &input) && input)
+    for (int caseI = 1; caseI <= caseLength; caseI++)
+    {
+        int result;
+        scanf("%d", &result);
+
+        if (result % 2)
+        {
+            insert(&headNodeImpar, result, 'd');
+        }
+        else
+        {
+            insert(&headNodePar, result, 's');
+        }
+    }
+
+    for (Node *tmp = headNodePar; tmp != NULL; tmp = tmp->next)
+    {
+        printf("%d\n", tmp->num);
+    }
+
+    // for (Node *tmp = headNodeImpar; tmp != NULL; tmp = tmp->next)
     // {
-
-    //     Queue *queue = malloc(sizeof(Queue));
-    //     init(queue);
-
-    //     for (size_t i = 1; i <= input; i++)
-    //     {
-    //         endInsert(queue, i);
-    //     }
-
-    //     printf("Discarded cards:");
-    //     while (queue->length >= 2)
-    //     {
-
-    //         printf(" %d",
-    //                removeFirstNode(queue));
-
-    //         endInsert(queue,
-    //                   removeFirstNode(queue));
-
-    //         if (queue->length >= 2)
-    //             printf(",");
-    //     }
-    //     printf("\nRemaining card: %d\n", queue->head->card);
+    //     printf("%d\n", tmp->num);
     // }
 
     return 0;
