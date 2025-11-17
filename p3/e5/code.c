@@ -7,10 +7,10 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-void insert(Node **head, char word[20])
+void insert(Node **head, char word[21])
 {
     Node *newNode = malloc(sizeof(Node));
-    newNode->word = malloc(sizeof(char) * 20);
+    newNode->word = malloc(sizeof(char) * 21);
     strcpy(newNode->word, word);
     newNode->next = NULL;
 
@@ -24,6 +24,7 @@ void insert(Node **head, char word[20])
     {
         if (tmp == NULL)
         {
+            // entra aq no fim da fila
             prev->next = newNode;
             break;
         }
@@ -59,9 +60,9 @@ int main()
         Node *frase = NULL;
 
         char result[21];
-        char space;
+        char space = 'A';
 
-        while (scanf("%s", result) && scanf("%c", &space) && space != '\n')
+        while (space != '\n' && scanf("%20s", result) && scanf("%c", &space))
         {
             int isRepetido = 0;
             for (Node *tmp = frase; tmp != NULL; tmp = tmp->next)
