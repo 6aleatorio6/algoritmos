@@ -15,6 +15,7 @@ typedef struct Vertice
     Aresta *arestas;
     int edgeCount;
     int u;
+    int index;
 } Vertice;
 typedef Vertice *pVertice;
 
@@ -40,6 +41,7 @@ pVertice addVertice(pGrafo grafo, int u)
     newVertice->prox = grafo->vertices;
     newVertice->arestas = NULL;
     newVertice->edgeCount = 0;
+    newVertice->index = grafo->vertexCount;
 
     grafo->vertexCount++;
     grafo->vertices = newVertice;
@@ -199,6 +201,53 @@ void debugReadA(pGrafo grafo, FILE *file)
     printf("qntd de arestas: %d\n", count / 2);
 }
 
+typedef struct
+{
+    int dist;
+    int u;
+} MenorCaminho;
+
+// todo esse codigo é pensando no céu azul
+MenorCaminho *getMenoresCaminhos(pGrafo grafo, int u)
+{
+    MenorCaminho *menoresCaminhos = calloc(sizeof(MenorCaminho), grafo->vertexCount);
+
+    pVertice *fila = malloc(sizeof(pVertice) * grafo->vertexCount);
+    int inicio = 0, fim = 0;
+
+    // origem
+    pVertice vertice = findVertice(grafo, u);
+    fila[fim++] = vertice;
+    menoresCaminhos[vertice->index].dist = 0;
+    menoresCaminhos[vertice->index].u = u;
+
+    while (inicio < fim)
+    {
+        pVertice verticeAtual = fila[inicio++];
+
+        pAresta tmpAresta = verticeAtual->arestas;
+        while (tmpAresta != NULL)
+        {
+            pVertice verticeDaPonta = findVertice(grafo, tmpAresta->v);
+
+            // apenas origem deve ser 0
+            bool jaFoiVisitado = menoresCaminhos[verticeDaPonta->index].dist != 0 || verticeDaPonta->u == u;
+            if (!jaFoiVisitado)
+            {
+                fila[fim++] = verticeDaPonta;
+                printf("vertice: %d | dist: %d\n", tmpAresta->v, menoresCaminhos[verticeAtual->index].dist + 1);
+
+                menoresCaminhos[verticeDaPonta->index].dist = menoresCaminhos[verticeAtual->index].dist + 1;
+                menoresCaminhos[verticeDaPonta->index].u = tmpAresta->v;
+            }
+
+            tmpAresta = tmpAresta->prox;
+        }
+    }
+
+    return menoresCaminhos;
+}
+
 int main()
 {
     pGrafo grafo = initGrafo();
@@ -231,6 +280,13 @@ int main()
     printf("- grau medio: %d\n", getGrauMedio(grafo));
     printf("- maior hub: %d\n", getMaiorHub(grafo));
 
+    MenorCaminho *minCaminhos = getMenoresCaminhos(grafo, 0);
+    // int index = 0;
+    // while (index < grafo->vertexCount)
+    // {
+    //     printf("vertice: %d | dist: %d\n", minCaminhos[index].u, minCaminhos[index].dist);
+    //     index++;
+    // }
     // debugReadV(grafo, file);
     // debugReadA(grafo, file);
 
