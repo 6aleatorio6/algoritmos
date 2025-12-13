@@ -79,7 +79,7 @@ pAresta findAresta(pVertice vertice, int v)
     return tmp;
 }
 
-FILE *getFile()
+FILE *prepareFile()
 {
     char filepath[100];
     scanf("%s", filepath);
@@ -118,6 +118,56 @@ void freeAll(FILE *file, pGrafo grafo)
     free(grafo);
 }
 
+int getTotalAresta(pGrafo grafo)
+{
+    return grafo->vertexCount;
+}
+
+int getTotalVertices(pGrafo grafo)
+{
+    int count = 0;
+
+    pVertice vertice = grafo->vertices;
+    while (vertice != NULL)
+    {
+        count += vertice->edgeCount;
+        vertice = vertice->prox;
+    }
+
+    return count / 2;
+}
+
+int getGrauMedio(pGrafo grafo)
+{
+    int count = 0;
+
+    pVertice vertice = grafo->vertices;
+    while (vertice != NULL)
+    {
+        count += vertice->edgeCount;
+        vertice = vertice->prox;
+    }
+
+    return count / grafo->vertexCount;
+}
+
+int getMaiorHub(pGrafo grafo)
+{
+    int max = 0;
+
+    pVertice vertice = grafo->vertices;
+    while (vertice != NULL)
+    {
+
+        if (max < vertice->edgeCount)
+            max = vertice->edgeCount;
+
+        vertice = vertice->prox;
+    }
+
+    return max;
+}
+
 void debugReadV(pGrafo grafo, FILE *file)
 {
     pVertice tmp = grafo->vertices;
@@ -154,7 +204,7 @@ int main()
     pGrafo grafo = initGrafo();
 
     int s, t;
-    FILE *file = getFile();
+    FILE *file = prepareFile();
     while (readST(file, &s, &t))
     {
         // printf("read: %d %d\n", s, t);
@@ -175,8 +225,14 @@ int main()
         addAresta(verticeT, s);
     }
 
-    debugReadV(grafo, file);
-    debugReadA(grafo, file);
+    printf("RESULTADO\n");
+    printf("- total de arestas: %d\n", getTotalAresta(grafo));
+    printf("- total de vertices: %d\n", getTotalVertices(grafo));
+    printf("- grau medio: %d\n", getGrauMedio(grafo));
+    printf("- maior hub: %d\n", getMaiorHub(grafo));
+
+    // debugReadV(grafo, file);
+    // debugReadA(grafo, file);
 
     freeAll(file, grafo);
     return 0;
