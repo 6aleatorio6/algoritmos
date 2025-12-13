@@ -12,15 +12,19 @@ typedef No *p_No;
 
 p_No add_no(p_No no, int uOrigem)
 {
-    p_No newNo = malloc(No);
+    p_No newNo = malloc(sizeof(No));
     newNo->prox = NULL;
     newNo->arestas = NULL;
     newNo->value = uOrigem;
 
-    if (no != NULL)
-    {
-        no->prox = newNo;
-    }
+    if (no == NULL)
+        return newNo;
+
+    p_No tmp = no;
+    while (tmp->prox != NULL)
+        tmp = tmp->prox;
+
+    tmp->prox = newNo;
 
     return no;
 }
@@ -35,11 +39,10 @@ typedef Grafo *p_grafo;
 
 p_grafo init_grafo()
 {
-    p_grafo grafo = malloc(Grafo);
+    p_grafo grafo = malloc(sizeof(Grafo));
     grafo->n = 0;
     grafo->adj = NULL;
-
-    return grafo
+    return grafo;
 }
 
 p_No add_vertice(p_grafo grafo, int uOrigem)
@@ -51,7 +54,8 @@ p_No add_vertice(p_grafo grafo, int uOrigem)
     }
 
     p_No newVertice = add_no(tmp, uOrigem);
-    grafo->adj = newVertice;
+    if (grafo->adj == NULL)
+        grafo->adj = newVertice;
 
     return newVertice;
 }
@@ -59,7 +63,7 @@ p_No add_vertice(p_grafo grafo, int uOrigem)
 void add_aresta(p_grafo grafo, int uOrigem, int v)
 {
     p_No tmp = grafo->adj;
-    while (tmp != NULL && tmp->vertice != uOrigem)
+    while (tmp != NULL && tmp->value != uOrigem)
     {
         tmp = tmp->prox;
     }
@@ -69,11 +73,5 @@ void add_aresta(p_grafo grafo, int uOrigem, int v)
         tmp = add_vertice(grafo, uOrigem);
     }
 
-    p_No arestas = tmp->arestas;
-    while (arestas != NULL)
-    {
-        arestas = arestas->prox;
-    }
-
-    *tmp->arestas = add_no(arestas, v);
+    tmp->arestas = add_no(tmp->arestas, v);
 }
