@@ -39,6 +39,7 @@ pVertice addVertice(pGrafo grafo, int u)
     newVertice->u = u;
     newVertice->prox = grafo->vertices;
     newVertice->arestas = NULL;
+    newVertice->edgeCount = 0;
 
     grafo->vertexCount++;
     grafo->vertices = newVertice;
@@ -81,7 +82,7 @@ pAresta findAresta(pVertice vertice, int v)
 FILE *getFile()
 {
     char filepath[100];
-    scanf("%s", &filepath);
+    scanf("%s", filepath);
 
     FILE *file = fopen(filepath, "r");
     fscanf(file, "%*s %*s %*s");
@@ -130,6 +131,8 @@ void debugReadV(pGrafo grafo, FILE *file)
 
 void debugReadA(pGrafo grafo, FILE *file)
 {
+    int count = 0;
+
     pVertice vertice = grafo->vertices;
     while (vertice != NULL)
     {
@@ -140,8 +143,10 @@ void debugReadA(pGrafo grafo, FILE *file)
             aresta = aresta->prox;
         }
 
+        count += vertice->edgeCount;
         vertice = vertice->prox;
     }
+    printf("qntd de arestas: %d\n", count / 2);
 }
 
 int main()
