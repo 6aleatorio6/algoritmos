@@ -235,7 +235,7 @@ MenorCaminho *getMenoresCaminhos(pGrafo grafo, int u)
             if (!jaFoiVisitado)
             {
                 fila[fim++] = verticeDaPonta;
-                printf("vertice: %d | dist: %d\n", tmpAresta->v, menoresCaminhos[verticeAtual->index].dist + 1);
+                // printf("vertice: %d | dist: %d\n", tmpAresta->v, menoresCaminhos[verticeAtual->index].dist + 1);
 
                 menoresCaminhos[verticeDaPonta->index].dist = menoresCaminhos[verticeAtual->index].dist + 1;
                 menoresCaminhos[verticeDaPonta->index].u = tmpAresta->v;
@@ -246,6 +246,26 @@ MenorCaminho *getMenoresCaminhos(pGrafo grafo, int u)
     }
 
     return menoresCaminhos;
+}
+
+MenorCaminho getExcentricidade(pGrafo grafo, int u)
+{
+    pVertice vertice = findVertice(grafo, u);
+    MenorCaminho maiorCaminho = {-1, -1};
+
+    MenorCaminho *minCaminhos = getMenoresCaminhos(grafo, u);
+    int index = 0;
+    while (index < grafo->vertexCount)
+    {
+        if (maiorCaminho.dist < minCaminhos[index].dist)
+        {
+            maiorCaminho = minCaminhos[index];
+        }
+
+        index++;
+    }
+
+    return maiorCaminho;
 }
 
 int main()
@@ -280,13 +300,9 @@ int main()
     printf("- grau medio: %d\n", getGrauMedio(grafo));
     printf("- maior hub: %d\n", getMaiorHub(grafo));
 
-    MenorCaminho *minCaminhos = getMenoresCaminhos(grafo, 0);
-    // int index = 0;
-    // while (index < grafo->vertexCount)
-    // {
-    //     printf("vertice: %d | dist: %d\n", minCaminhos[index].u, minCaminhos[index].dist);
-    //     index++;
-    // }
+    MenorCaminho asd = getExcentricidade(grafo, 0);
+    printf("- excentridiade: %d vertice: %d \n", asd.dist, asd.u);
+
     // debugReadV(grafo, file);
     // debugReadA(grafo, file);
 
