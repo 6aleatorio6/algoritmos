@@ -40,54 +40,41 @@ typedef Grafo *p_grafo;
 p_grafo init_grafo()
 {
     p_grafo grafo = malloc(sizeof(Grafo));
-
     grafo->n = 0;
     grafo->adj = NULL;
-
     return grafo;
 }
 
-p_No add_vertice(p_grafo grafo, int uOrigem)
+p_No find_vertice(p_grafo grafo, int val)
 {
     p_No tmp = grafo->adj;
     while (tmp != NULL)
     {
+        if (tmp->value == val)
+            return tmp;
         tmp = tmp->prox;
     }
+    return NULL;
+}
 
-    p_No newVertice = add_no(tmp, uOrigem);
-    if (grafo->adj == NULL)
-        grafo->adj = newVertice;
+p_No add_vertice(p_grafo grafo, int uOrigem)
+{
+    p_No v = find_vertice(grafo, uOrigem);
+    if (v)
+        return v;
 
-    return newVertice;
+    grafo->adj = add_no(grafo->adj, uOrigem);
+    grafo->n++;
+    return find_vertice(grafo, uOrigem);
 }
 
 void add_aresta(p_grafo grafo, int uOrigem, int v)
 {
-    p_No tmp = grafo->adj;
-    p_No old_tmp = NULL;
+    p_No vertU = add_vertice(grafo, uOrigem);
+    p_No vertV = add_vertice(grafo, v);
 
-    while (tmp != NULL && tmp->value != uOrigem)
-    {
-        old_tmp = tmp;
-        tmp = tmp->prox;
-    }
-
-    if (tmp == NULL)
-    {
-        tmp = add_vertice(grafo, uOrigem);
-
-        if (grafo->adj == NULL)
-        {
-            grafo->adj = tmp;
-        }
-        else
-        {
-            old_tmp->prox = tmp;
-        }
-    }
-
-    tmp->arestas = add_no(tmp->arestas, v);
+    vertU->arestas = add_no(vertU->arestas, v);
+    vertV->arestas = add_no(vertV->arestas, uOrigem);
 }
 
 void print_grafo(p_grafo grafo)
@@ -112,29 +99,56 @@ void print_grafo(p_grafo grafo)
     }
 }
 
+void free_lista(p_No lista)
+{
+    while (lista)
+    {
+        p_No tmp = lista;
+        lista = lista->prox;
+        free(tmp);
+    }
+}
+
+void free_grafo(p_grafo grafo)
+{
+    p_No tmp = grafo->adj;
+    while (tmp)
+    {
+        if (tmp->arestas)
+            free_lista(tmp->arestas);
+        tmp = tmp->prox;
+    }
+    free_lista(grafo->adj);
+    free(grafo);
+}
+
 int main()
 {
     char filename[200];
-    scanf("%s", &filename);
+    scanf("%199s", filename);
 
     FILE *file = fopen(filename, "r");
+    if (!file)
+    {
+        printf("Erro ao abrir o arquivo\n");
+        return 1;
+    }
 
     fscanf(file, "%*s %*s %*s");
 
     int u, v, w;
-
     p_grafo grafo = init_grafo();
 
     while (fscanf(file, "%d %d %d", &u, &v, &w) == 3)
     {
-        // printf("Source: %d, Target: %d, Weight: %d\n", u, v, w);
-
         add_aresta(grafo, u, v);
     }
 
     fclose(file);
 
     print_grafo(grafo);
+
+    free_grafo(grafo);
 
     return 0;
 }
