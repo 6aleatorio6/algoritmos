@@ -268,6 +268,14 @@ MenorCaminho getExcentricidade(pGrafo grafo, int u)
     return maiorCaminho;
 }
 
+int getDiametro(pGrafo grafo)
+{
+    MenorCaminho excentricidade1 = getExcentricidade(grafo, grafo->vertices->u);
+    MenorCaminho excentricidade2 = getExcentricidade(grafo, excentricidade1.u);
+
+    return excentricidade2.dist;
+}
+
 int main()
 {
     pGrafo grafo = initGrafo();
@@ -299,9 +307,7 @@ int main()
     printf("- total de vertices: %d\n", getTotalVertices(grafo));
     printf("- grau medio: %d\n", getGrauMedio(grafo));
     printf("- maior hub: %d\n", getMaiorHub(grafo));
-
-    MenorCaminho asd = getExcentricidade(grafo, 0);
-    printf("- excentridiade: %d vertice: %d \n", asd.dist, asd.u);
+    printf("- diametro: %d\n", getDiametro(grafo));
 
     // debugReadV(grafo, file);
     // debugReadA(grafo, file);
