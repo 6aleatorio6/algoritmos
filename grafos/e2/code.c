@@ -120,12 +120,12 @@ void freeAll(FILE *file, pGrafo grafo)
     free(grafo);
 }
 
-int getTotalAresta(pGrafo grafo)
+int getTotalVertices(pGrafo grafo)
 {
     return grafo->vertexCount;
 }
 
-int getTotalVertices(pGrafo grafo)
+int getTotalAresta(pGrafo grafo)
 {
     int count = 0;
 
