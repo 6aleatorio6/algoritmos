@@ -145,16 +145,16 @@ StringArray *filterByDist(pGrafo grafo, int maxDist)
 
         for (size_t j = i + 1; j < convidados->length; j++)
         {
-
-            if (strcmp(convidados->items[j], convidados->items[i]) < 0)
+            if (strcmp(convidados->items[j],
+                       convidados->items[indexMenor]) < 0)
             {
                 indexMenor = j;
             }
         }
 
-        char *swapString = convidados->items[i];
+        char *tmp = convidados->items[i];
         convidados->items[i] = convidados->items[indexMenor];
-        convidados->items[indexMenor] = swapString;
+        convidados->items[indexMenor] = tmp;
     }
 
     return convidados;
