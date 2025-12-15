@@ -48,7 +48,7 @@ pVertice addVertice(pGrafo grafo, int maxArestas, char *name)
     newVertice->prox = grafo->vertices;
     newVertice->index = grafo->vertexCount;
 
-    newVertice->arestas = malloc(sizeof(char) * maxArestas);
+    newVertice->arestas = malloc(sizeof(char *) * maxArestas);
     newVertice->arestasCount = 0;
 
     grafo->vertexCount++;
@@ -59,7 +59,9 @@ pVertice addVertice(pGrafo grafo, int maxArestas, char *name)
 
 void addAresta(pVertice vertice, char *name)
 {
-    vertice->arestas[vertice->arestasCount++] = name;
+    char *nameA = malloc(sizeof(char) * 21);
+    strcpy(nameA, name);
+    vertice->arestas[vertice->arestasCount++] = nameA;
 }
 
 pVertice findVertice(pGrafo grafo, char *name)
@@ -100,7 +102,7 @@ MenorCaminho *getMenoresCaminhos(pGrafo grafo, char *name)
         {
             pVertice verticeDaPonta = findVertice(grafo, verticeAtual->arestas[i]);
 
-            bool jaFoiVisitado = menoresCaminhos[verticeDaPonta->index].dist != 0 || strcmp(name, verticeAtual->name) != 0;
+            bool jaFoiVisitado = menoresCaminhos[verticeDaPonta->index].dist != 0 || strcmp(name, verticeDaPonta->name) == 0;
             if (!jaFoiVisitado)
             {
                 fila[fim++] = verticeDaPonta;
@@ -128,11 +130,31 @@ StringArray *filterByDist(pGrafo grafo, int maxDist)
     {
         MenorCaminho menorCaminho = menoresCaminhos[i];
 
-        printf("%s asd \n", menorCaminho.name);
         if (menorCaminho.dist <= maxDist && menorCaminho.dist != 0)
         {
-            convidados->items[convidados->length++] = menorCaminho.name;
+            int index = convidados->length++;
+            convidados->items[index] = menorCaminho.name;
         }
+    }
+
+    // totalmente ineficiente
+
+    for (size_t i = 0; i < convidados->length; i++)
+    {
+        int indexMenor = i;
+
+        for (size_t j = i + 1; j < convidados->length; j++)
+        {
+
+            if (strcmp(convidados->items[j], convidados->items[i]) < 0)
+            {
+                indexMenor = j;
+            }
+        }
+
+        char *swapString = convidados->items[i];
+        convidados->items[i] = convidados->items[indexMenor];
+        convidados->items[indexMenor] = swapString;
     }
 
     return convidados;
@@ -168,11 +190,11 @@ int main()
 
     StringArray *convidados = filterByDist(grafo, distMax);
 
-    // printf("%d\n", convidados->length);
-    // for (size_t i = 0; i < convidados->length; i++)
-    // {
-    //     printf("%s\n", convidados->items[i]);
-    // }
+    printf("%d\n", convidados->length);
+    for (size_t i = 0; i < convidados->length; i++)
+    {
+        printf("%s\n", convidados->items[i]);
+    }
 
     /* code */
     return 0;
