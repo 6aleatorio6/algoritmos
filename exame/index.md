@@ -11,3 +11,9 @@ beecrowd | 1110
 
 Jogando Cartas Fora
 Folclore, adaptado por Piotr Rudnicki Canada
+
+## balanco parenteses
+
+beecrowd | 1068
+Balanço de Parênteses I
+Por Neilor Tonin, URI Brasil
