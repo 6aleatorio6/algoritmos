@@ -24,7 +24,7 @@ for IN_FILE in "${SRC}"/input*; do
 
     echo ""
     echo "=================== Comparando $IN_FILE ========================================"
-    printf "| %5s | %-30s | %-30s | %-8s |\n" "LINHA" "ESPERADO" "SAÍDA" "STATUS"
+    printf "| %5s | %-50s | %-50s | %-8s |\n" "LINHA" "ESPERADO" "SAÍDA" "STATUS"
     echo "====================================================================================================="
 
     max=${#OUT_LINES[@]}
@@ -32,7 +32,7 @@ for IN_FILE in "${SRC}"/input*; do
 
     truncate() {
         local s="$1"
-        local n="${2:-30}"
+        local n="${2:-50}"
         [ "${#s}" -le "$n" ] && printf "%s" "$s" || printf "%s..." "${s:0:((n-3))}"
     }
 
@@ -43,7 +43,7 @@ for IN_FILE in "${SRC}"/input*; do
         st="FAILED"
         [ "$o" = "$e" ] && st="PASS"
 
-        printf "| %5d | %-30s | %-30s | %-8s |\n" \
+        printf "| %5d | %-50s | %-50s | %-8s |\n" \
             "$((i+1))" "$(truncate "$e")" "$(truncate "$o")" "$st"
     done
 
