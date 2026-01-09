@@ -155,6 +155,56 @@ pNode removerNo(pNode root, int value)
     return root;
 }
 
+int altura(pNode root)
+{
+    if (root == NULL)
+    {
+        return -1;
+    }
+
+    int hl = altura(root->l);
+    int hr = altura(root->r);
+
+    return (hl > hr ? hl : hr) + 1;
+}
+
+int alturaIt(pNode root)
+{
+    if (root == NULL)
+        return -1; // ou 0, depende do critério
+
+    pNode fila[1000];
+    int s = -1, t = 0;
+
+    fila[++s] = root;
+    t++;
+
+    int h = -1;
+
+    while (s < t)
+    {
+        int qntd = t - s;
+        h++;
+
+        while (qntd--)
+        {
+            pNode current = fila[s++];
+
+            if (current->l != NULL)
+            {
+                fila[t++] = current->l;
+            }
+
+            if (current->r != NULL)
+            {
+                fila[t++] = current->r;
+            }
+        }
+    }
+
+    return h;
+}
+
 int main(int argc, char const *argv[])
 {
 
@@ -211,6 +261,13 @@ int main(int argc, char const *argv[])
         if (strcmp(comando, "INFIXA") == 0)
         {
             readIn(root, &isFirst);
+            printf("\n");
+        }
+
+        if (strcmp(comando, "H") == 0)
+        {
+            printf("%d", alturaIt(root));
+
             printf("\n");
         }
 
