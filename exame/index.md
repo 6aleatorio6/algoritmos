@@ -31,3 +31,9 @@ Pérolas
 Por Gabriel Duarte, UNIFESO BR Brazil
 
 Estruturas e Bibliotecas | Nível 8
+
+# pip
+
+beecrowd | 1194
+Prefixa, Infixa e Posfixa
+Por Sebastião Alves Brasil
