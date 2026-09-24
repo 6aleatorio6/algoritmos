@@ -28,6 +28,8 @@ int main(void) {
     } else{
         rewind(fc);
 
+        // errei a comparacao do eof
+        //tenho que entender sobre esse 49s e pq o printf não tem
         while(fscanf(fc, "%49s", linha) != EOF){
             fprintf(fr,"%s\n", linha);
         }
