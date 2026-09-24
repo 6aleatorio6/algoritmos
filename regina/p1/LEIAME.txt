@@ -1,0 +1,28 @@
+Corretor da Escada da P1 (AED I)
+
+1. Descompacte dentro de ~/projects/algoritmos/regina (cria ou completa a pasta p1).
+2. Copie o modelo do exercício N e complete os trechos "SEU CÓDIGO":
+       cp modelos/exN.c exN.c
+3. Rode:  ./corrige.sh N      (ou ./corrige.sh sem nada para corrigir todos)
+
+Exercícios com testes:
+  ex2   Somar uma série até ela parar de mudar: eˣ
+  ex5   Trocar dois valores dentro de uma função
+  ex6   Somar um vetor sem laço: recursão
+  ex7   Vetor do tamanho que o usuário pedir
+  ex8   Remover repetidos e encolher o vetor
+  ex9   Fichas dentro de fichas: struct
+  ex10  Ler um arquivo contando
+  ex11  Procurar um comando no arquivo
+  ex13  Pilha em vetor: push e pop
+  ex14  Decimal para binário
+  ex17  Montar e percorrer uma lista de nós
+  ex18  Pilha encadeada: push, pop e libera
+  ex19  Somar 1 a um binário, recursivamente
+  ex20  Fila encadeada: insere e retira
+
+Sem testes (rastreio ou conversão, confira pela página): 1, 3, 4, 12, 15, 16
+
+O script compila com -fsanitize=address,undefined: além de comparar a saída, acusa acesso
+fora do vetor, uso depois do free, memória não liberada e laço infinito. Espaços no fim das
+linhas e linhas vazias no final são ignorados. Opções: CC=gcc, SAN=0, TEMPO=5, TUDO=1.

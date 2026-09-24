@@ -1,0 +1,1 @@
+4 linhas; 'o' aparece 4 vezes

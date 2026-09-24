@@ -1,0 +1,1 @@
+menor -1.00, maior 8.00, media 3.12

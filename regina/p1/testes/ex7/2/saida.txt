@@ -1,0 +1,1 @@
+menor 5.00, maior 5.00, media 5.00
